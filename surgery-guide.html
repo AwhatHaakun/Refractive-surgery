@@ -400,16 +400,27 @@
     .hero-ctas { justify-content: center; }
     .hero-image { flex: 0 0 320px; max-width: 320px; }
     .principle-grid { flex-direction: column; text-align: center; }
-    .steps { grid-template-columns: repeat(3, 1fr); }
-    .features-grid { grid-template-columns: 1fr 1fr; }
-    .candidate-grid, .procon-grid { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: repeat(3, 1fr) !important; }
+    .features-grid { grid-template-columns: 1fr 1fr !important; }
+    .candidate-grid, .procon-grid, .version-grid { grid-template-columns: 1fr; }
+    .tab-btn { padding: 10px 14px; font-size: 14px; }
+    .tab-bar-inner { overflow-x: auto; justify-content: flex-start; -webkit-overflow-scrolling: touch; }
+    .dropdown-menu { min-width: 220px; flex-wrap: wrap; }
+    .dropdown-item { font-size: 12px; padding: 8px 12px; }
   }
   @media (max-width: 480px) {
-    .hero h1 { font-size: 32px; }
-    .steps { grid-template-columns: 1fr 1fr; }
-    .features-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 28px; }
+    .hero .subtitle { font-size: 15px; }
+    .section-title { font-size: 24px; }
+    .steps { grid-template-columns: 1fr 1fr !important; }
+    .features-grid { grid-template-columns: 1fr !important; }
     .hero-image { flex: 0 0 240px; max-width: 240px; }
-    .tab-btn { padding: 12px 14px; font-size: 15px; }
+    .tab-btn { padding: 8px 10px; font-size: 13px; }
+    .dropdown-menu { min-width: 200px; left: 0; transform: translateX(0) translateY(8px); }
+    .tab-item.has-dropdown:hover .dropdown-menu { transform: translateX(0) translateY(0); }
+    .nav-inner { gap: 14px; }
+    .nav-item { font-size: 11px; }
+    section { padding: 48px 14px; }
   }
 </style>
 </head>
