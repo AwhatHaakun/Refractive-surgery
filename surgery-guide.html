@@ -416,8 +416,13 @@
     .features-grid { grid-template-columns: 1fr !important; }
     .hero-image { flex: 0 0 240px; max-width: 240px; }
     .tab-btn { padding: 8px 10px; font-size: 13px; }
-    .dropdown-menu { min-width: 200px; left: 0; transform: translateX(0) translateY(8px); }
-    .tab-item.has-dropdown:hover .dropdown-menu { transform: translateX(0) translateY(0); }
+    .dropdown-menu { 
+      min-width: auto; width: 85vw; left: 50%; 
+      transform: translateX(-50%) translateY(8px);
+      flex-direction: column; gap: 2px; padding: 10px 12px;
+    }
+    .tab-item.has-dropdown:hover .dropdown-menu { transform: translateX(-50%) translateY(0); }
+    .dropdown-item { font-size: 13px; padding: 10px 14px; text-align: left; }
     .nav-inner { gap: 14px; }
     .nav-item { font-size: 11px; }
     section { padding: 48px 14px; }
