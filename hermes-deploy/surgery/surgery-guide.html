@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>近视手术全术式科普</title>
+<style>
+  :root {
+    --bg-white: #ffffff;
+    --bg-light: #f5f5f7;
+    --bg-dark: #000000;
+    --text-primary: #1d1d1f;
+    --text-secondary: #6e6e73;
+    --text-tertiary: #86868b;
+    --text-inverse: #f5f5f7;
+    --accent: #0071e3;
+    --accent-hover: #0077ed;
+    --border: rgba(0,0,0,0.08);
+    --nav-height: 48px;
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 18px;
+    --radius-xl: 22px;
+    --radius-pill: 980px;
+    --shadow-soft: 0 4px 16px rgba(0,0,0,0.04);
+    --shadow-card: 0 8px 32px rgba(0,0,0,0.1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'SF Pro Display', 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+    background: var(--bg-white);
+    color: var(--text-primary);
+    line-height: 1.47;
+    letter-spacing: -0.022em;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== Tab Bar (Procedure Selector) - Apple Style ===== */
+  .tab-bar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1001;
+    background: rgba(255,255,255,0.72);
+    backdrop-filter: saturate(180%) blur(30px);
+    -webkit-backdrop-filter: saturate(180%) blur(30px);
+    border-bottom: 0.5px solid rgba(0,0,0,0.08);
+    box-shadow: 0 1px 0 0 rgba(0,0,0,0.03);
+  }
+  .tab-bar-inner {
+    display: flex; justify-content: center; align-items: center;
+    max-width: 980px; margin: 0 auto; padding: 0 22px;
+  }
+  .tab-item { position: relative; display: flex; align-items: center; }
+  .tab-btn {
+    padding: 14px 24px; font-size: 17px; font-weight: 600;
+    color: var(--text-primary); border: none; background: none;
+    cursor: pointer; border-bottom: 3px solid transparent;
+    transition: all 0.4s cubic-bezier(0.28, 0.11, 0.32, 1);
+    white-space: nowrap; letter-spacing: -0.3px;
+  }
+  .tab-btn:hover { color: var(--accent); transform: translateY(-1px); }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab-btn.coming-soon { color: rgba(0,0,0,0.4); }
+  .tab-btn.coming-soon::after {
+    content: ' 即将'; font-size: 11px; font-weight: 500;
+    color: rgba(0,0,0,0.3); margin-left: 4px;
+  }
+
+  /* Dropdown */
+  .dropdown-menu {
+    position: absolute; top: 100%; left: 50%;
+    transform: translateX(-50%) translateY(8px);
+    background: rgba(255,255,255,0.82);
+    backdrop-filter: saturate(200%) blur(40px);
+    -webkit-backdrop-filter: saturate(200%) blur(40px);
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.8);
+    border: 0.5px solid rgba(0,0,0,0.06);
+    padding: 16px 20px; opacity: 0; visibility: hidden;
+    transition: all 0.35s cubic-bezier(0.28, 0.11, 0.32, 1);
+    pointer-events: none; z-index: 2000;
+    display: flex; gap: 8px; flex-wrap: nowrap;
+  }
+  .tab-item.has-dropdown:hover .dropdown-menu,
+  .tab-item.has-dropdown .tab-btn:focus+.dropdown-menu {
+    opacity: 1; visibility: visible;
+    transform: translateX(-50%) translateY(0); pointer-events: all;
+  }
+  .dropdown-item {
+    display: block; padding: 10px 18px; font-size: 14px; font-weight: 500;
+    color: var(--text-primary); text-decoration: none;
+    transition: all 0.2s cubic-bezier(0.28, 0.11, 0.32, 1);
+    letter-spacing: -0.2px; border-radius: 12px; white-space: nowrap;
+    text-align: center; cursor: pointer;
+  }
+  .dropdown-item:hover,
+  .dropdown-item.active {
+    background: rgba(0,113,227,0.1); color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  /* ===== Navigation ===== */
+  nav {
+    position: fixed; top: 54px; left: 0; right: 0; height: var(--nav-height);
+    background: rgba(0,0,0,0.82);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    z-index: 1000; display: flex; align-items: center;
+    justify-content: center; padding: 0 22px;
+  }
+  .nav-inner {
+    display: flex; gap: 28px; max-width: 980px; width: 100%;
+    justify-content: center; overflow-x: auto;
+    -webkit-overflow-scrolling: touch; scrollbar-width: none;
+  }
+  .nav-inner::-webkit-scrollbar { display: none; }
+  .nav-item {
+    color: rgba(255,255,255,0.72); text-decoration: none;
+    font-size: 13px; font-weight: 400; white-space: nowrap;
+    transition: color 0.2s; letter-spacing: -0.12px; cursor: pointer;
+  }
+  .nav-item:hover, .nav-item.active { color: #ffffff; }
+
+  /* ===== Main ===== */
+  main { margin-top: 102px; }
+
+  /* ===== Hero ===== */
+  .hero {
+    background: var(--bg-dark); color: var(--text-inverse);
+    min-height: 88vh; display: flex; align-items: center;
+    justify-content: center; padding: 60px 22px 80px;
+    position: relative; overflow: hidden;
+  }
+  .hero-content {
+    display: flex; align-items: center; justify-content: center;
+    gap: 60px; max-width: 1080px; width: 100%; flex-wrap: wrap;
+  }
+  .hero-text { flex: 1; min-width: 280px; text-align: left; }
+  .hero-badge {
+    display: inline-block; font-size: 14px; font-weight: 600;
+    letter-spacing: 0.8px; text-transform: uppercase;
+    color: rgba(255,255,255,0.72); margin-bottom: 16px;
+    opacity: 0; animation: fadeInUp 0.8s cubic-bezier(0.28, 0.11, 0.32, 1) 0.2s forwards;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .hero h1 {
+    font-size: 52px; font-weight: 600; line-height: 1.07;
+    letter-spacing: -0.28px; margin-bottom: 12px;
+    opacity: 0; animation: fadeInUp 0.8s cubic-bezier(0.28, 0.11, 0.32, 1) 0.4s forwards;
+  }
+  .hero .subtitle {
+    font-size: 21px; font-weight: 400; line-height: 1.19; letter-spacing: 0.231px;
+    color: rgba(255,255,255,0.72); margin-bottom: 32px;
+    opacity: 0; animation: fadeInUp 0.8s cubic-bezier(0.28, 0.11, 0.32, 1) 0.6s forwards;
+  }
+  .hero-ctas {
+    display: flex; gap: 14px; flex-wrap: wrap;
+    opacity: 0; animation: fadeInUp 0.8s cubic-bezier(0.28, 0.11, 0.32, 1) 0.8s forwards;
+  }
+  .btn-primary {
+    display: inline-flex; align-items: center; background: var(--accent);
+    color: #fff; padding: 11px 21px; border-radius: var(--radius-pill);
+    font-size: 14px; font-weight: 400; text-decoration: none; border: none;
+    cursor: pointer; transition: all 0.3s cubic-bezier(0.28, 0.11, 0.32, 1);
+  }
+  .btn-primary:hover { background: var(--accent-hover); transform: scale(1.02); box-shadow: 0 8px 24px rgba(0,113,227,0.4); }
+  .btn-outline {
+    display: inline-flex; align-items: center; background: transparent;
+    color: var(--accent); padding: 11px 21px; border: 1.5px solid var(--accent);
+    border-radius: var(--radius-pill); font-size: 14px; font-weight: 400;
+    text-decoration: none; cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.28, 0.11, 0.32, 1);
+  }
+  .btn-outline:hover { background: var(--accent); color: #fff; transform: scale(1.02); box-shadow: 0 8px 24px rgba(0,113,227,0.35); }
+  .hero-image {
+    flex: 0 0 460px; max-width: 460px; position: relative;
+    opacity: 0; animation: fadeInUp 0.8s cubic-bezier(0.28, 0.11, 0.32, 1) 1s forwards;
+  }
+  .hero-image img {
+    width: 100%; height: auto; display: block; border-radius: 18px;
+    mask-image: radial-gradient(ellipse at center, black 60%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 60%, transparent 100%);
+    transition: transform 0.6s cubic-bezier(0.28, 0.11, 0.32, 1);
+  }
+  .hero-image:hover img { transform: scale(1.02); }
+
+  /* ===== Sections ===== */
+  section { padding: 80px 22px; }
+  .section-inner { max-width: 900px; margin: 0 auto; }
+  .section-label {
+    font-size: 13px; font-weight: 600; color: var(--accent);
+    text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.8px;
+  }
+  .section-title { font-size: 32px; font-weight: 600; margin-bottom: 8px; letter-spacing: -0.28px; }
+  .section-desc { font-size: 17px; color: var(--text-secondary); margin-bottom: 40px; line-height: 1.47; }
+
+  /* Principle */
+  .principle-grid { display: flex; gap: 48px; align-items: center; flex-wrap: wrap; }
+  .principle-diagram { flex: 0 0 340px; max-width: 340px; display: flex; align-items: center; justify-content: center; }
+  .principle-diagram img { width: 100%; max-width: 340px; height: auto; display: block; }
+  .principle-text { flex: 1; min-width: 280px; }
+  .principle-text h3 { font-size: 20px; font-weight: 600; margin-bottom: 12px; }
+  .principle-text p { font-size: 15px; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.58; }
+  .principle-text strong { color: var(--text-primary); }
+
+  /* ===== Steps — horizontal gradient cards ===== */
+  .steps { 
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+  }
+  .step-card {
+    border-radius: 20px;
+    padding: 28px 18px 22px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.45s cubic-bezier(0.28, 0.11, 0.32, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  .step-card:nth-child(1) { background: linear-gradient(160deg, #e8f0fe, #d2e3fc); }
+  .step-card:nth-child(2) { background: linear-gradient(160deg, #d2e3fc, #a8ccf7); }
+  .step-card:nth-child(3) { background: linear-gradient(160deg, #a8ccf7, #7bb4f5); }
+  .step-card:nth-child(4) { background: linear-gradient(160deg, #7bb4f5, #4d9bf2); }
+  .step-card:nth-child(5) { background: linear-gradient(160deg, #4d9bf2, #0071e3); }
+  .step-card:nth-child(6) { background: linear-gradient(160deg, #0071e3, #005bb5); }
+  
+  .step-card:nth-child(4) .step-num,
+  .step-card:nth-child(5) .step-num,
+  .step-card:nth-child(6) .step-num { 
+    background: rgba(255,255,255,0.95); color: var(--accent); 
+  }
+  .step-card:nth-child(4) h4,
+  .step-card:nth-child(5) h4,
+  .step-card:nth-child(6) h4 { color: #fff; }
+  .step-card:nth-child(4) p,
+  .step-card:nth-child(5) p,
+  .step-card:nth-child(6) p { color: rgba(255,255,255,0.85); }
+  
+  .step-card:hover {
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: 0 18px 48px rgba(0,113,227,0.22);
+  }
+  .step-num {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: rgba(255,255,255,0.9);
+    color: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; font-weight: 700;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+  }
+  .step-card h4 { font-size: 15px; font-weight: 700; color: var(--text-primary); margin: 0; }
+  .step-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.45; margin: 0; }
+  .step-body { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+
+  /* ===== Features — colorful gradient card grid ===== */
+  .features-grid { 
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .feature-card {
+    border-radius: 22px;
+    padding: 32px 24px 28px;
+    transition: all 0.45s cubic-bezier(0.28, 0.11, 0.32, 1);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  /* Distinct gradient colors per card */
+  .feature-card:nth-child(1) { background: linear-gradient(155deg, #e3f2fd, #bbdefb); }
+  .feature-card:nth-child(2) { background: linear-gradient(155deg, #e8f5e9, #c8e6c9); }
+  .feature-card:nth-child(3) { background: linear-gradient(155deg, #fff3e0, #ffe0b2); }
+  .feature-card:nth-child(4) { background: linear-gradient(155deg, #f3e5f5, #e1bee7); }
+  .feature-card:nth-child(5) { background: linear-gradient(155deg, #e0f7fa, #b2ebf2); }
+  .feature-card:nth-child(6) { background: linear-gradient(155deg, #fce4ec, #f8bbd0); }
+
+  .feature-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 18px 52px rgba(0,0,0,0.14);
+  }
+  .feature-icon {
+    width: 54px; height: 54px; border-radius: 16px;
+    background: rgba(255,255,255,0.8);
+    backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  }
+  .feature-card h4 { 
+    font-size: 17px; font-weight: 700; 
+    color: var(--text-primary);
+    margin: 0;
+  }
+  .feature-card p { 
+    font-size: 14px; color: var(--text-secondary); 
+    line-height: 1.55; margin: 0; 
+  }
+
+  /* Candidates */
+  .candidate-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .candidate-card {
+    background: rgba(255,255,255,0.7); backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border: 0.5px solid rgba(0,0,0,0.06); border-radius: 18px;
+    padding: 28px; box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+  }
+  .candidate-card h4 { font-size: 17px; font-weight: 600; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+  .dot-green { background: #34c759; }
+  .dot-red { background: #ff3b30; }
+  .candidate-card ul { list-style: none; }
+  .candidate-card li { font-size: 14px; color: var(--text-secondary); padding: 6px 0; border-bottom: 0.5px solid rgba(0,0,0,0.06); }
+  .candidate-card li:last-child { border-bottom: none; }
+  .candidate-card li::before { content: '— '; color: var(--text-tertiary); }
+
+  /* Versions */
+  .version-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .version-card {
+    background: rgba(255,255,255,0.75); backdrop-filter: saturate(180%) blur(24px);
+    -webkit-backdrop-filter: saturate(180%) blur(24px);
+    border: 0.5px solid rgba(0,0,0,0.06); border-radius: 22px;
+    padding: 32px 28px; box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+    border-top: 4px solid var(--accent);
+    transition: all 0.5s cubic-bezier(0.28, 0.11, 0.32, 1);
+  }
+  .version-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 56px rgba(0,0,0,0.16), inset 0 1px 0 rgba(255,255,255,0.9);
+    background: rgba(255,255,255,0.88);
+  }
+  .tag {
+    display: inline-block; font-size: 12px; font-weight: 500; color: var(--accent);
+    background: rgba(0,113,227,0.08); padding: 3px 10px; border-radius: var(--radius-pill);
+    margin-bottom: 12px;
+  }
+  .version-card h4 { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+  .version-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.55; }
+  .version-card strong { color: var(--text-primary); }
+
+  /* Pros & Cons */
+  .procon-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .procon-card {
+    background: rgba(255,255,255,0.7); backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border: 0.5px solid rgba(0,0,0,0.06); border-radius: 18px;
+    padding: 28px; box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+  }
+  .procon-card h4 { font-size: 17px; font-weight: 600; margin-bottom: 14px; }
+  .procon-card ul { list-style: none; }
+  .procon-card li { font-size: 14px; color: var(--text-secondary); padding: 6px 0; border-bottom: 0.5px solid rgba(0,0,0,0.06); }
+  .procon-card li:last-child { border-bottom: none; }
+
+  /* Video */
+  #video-section { background: var(--bg-light); }
+  .video-placeholder {
+    width: 100%; max-width: 720px; margin: 0 auto;
+    background: rgba(0,0,0,0.88); border-radius: var(--radius-lg);
+    aspect-ratio: 16/9; display: flex; align-items: center;
+    justify-content: center; cursor: pointer; overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.28, 0.11, 0.32, 1);
+  }
+  .video-placeholder:hover { transform: scale(1.01); box-shadow: 0 12px 40px rgba(0,0,0,0.18); }
+  .video-placeholder .play-btn {
+    width: 64px; height: 64px; border-radius: 50%; background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px); display: flex; align-items: center;
+    justify-content: center; transition: transform 0.3s;
+  }
+  .video-placeholder:hover .play-btn { transform: scale(1.08); }
+  .video-placeholder iframe { width: 100%; height: 100%; border: none; }
+
+  /* Footer */
+  footer {
+    background: var(--bg-light); padding: 32px 22px;
+    text-align: center; border-top: 1px solid var(--border);
+  }
+  footer p { font-size: 12px; color: var(--text-tertiary); letter-spacing: -0.12px; }
+
+  /* Scroll Animation */
+  .fade-in {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
+  }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  /* Responsive */
+  @media (max-width: 834px) {
+    .hero h1 { font-size: 38px; }
+    .hero .subtitle { font-size: 17px; }
+    .section-title { font-size: 28px; }
+    .hero-content { flex-direction: column; text-align: center; }
+    .hero-ctas { justify-content: center; }
+    .hero-image { flex: 0 0 320px; max-width: 320px; }
+    .principle-grid { flex-direction: column; text-align: center; }
+    .steps { grid-template-columns: repeat(3, 1fr); }
+    .features-grid { grid-template-columns: 1fr 1fr; }
+    .candidate-grid, .procon-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 480px) {
+    .hero h1 { font-size: 32px; }
+    .steps { grid-template-columns: 1fr 1fr; }
+    .features-grid { grid-template-columns: 1fr; }
+    .hero-image { flex: 0 0 240px; max-width: 240px; }
+    .tab-btn { padding: 12px 14px; font-size: 15px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== Tab Bar ===== -->
+<div class="tab-bar">
+  <div class="tab-bar-inner">
+    <div class="tab-item">
+      <button class="tab-btn active" data-procedure="smile">SMILE 全飞秒</button>
+    </div>
+    <div class="tab-item has-dropdown">
+      <button class="tab-btn" data-procedure="fslasik">FS-LASIK 半飞秒</button>
+      <div class="dropdown-menu" data-parent="fslasik">
+        <span class="dropdown-item active" data-procedure="fslasik-ray">全光塑</span>
+        <span class="dropdown-item" data-procedure="fslasik-c">精雕C+</span>
+        <span class="dropdown-item" data-procedure="fslasik-q">精雕Q+</span>
+        <span class="dropdown-item" data-procedure="fslasik-wavefront">精雕</span>
+      </div>
+    </div>
+    <div class="tab-item">
+      <button class="tab-btn" data-procedure="tprk">全激光TPRK</button>
+    </div>
+    <div class="tab-item has-dropdown">
+      <button class="tab-btn" data-procedure="icl">晶体植入</button>
+      <div class="dropdown-menu" data-parent="icl">
+        <span class="dropdown-item active" data-procedure="icl-v5">ICL-V5</span>
+        <span class="dropdown-item" data-procedure="icl-longjing">龙晶</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Navigation ===== -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-item active" onclick="scrollToSection('hero')">概览</a>
+    <a class="nav-item" onclick="scrollToSection('principle')">手术原理</a>
+    <a class="nav-item" onclick="scrollToSection('process')">手术过程</a>
+    <a class="nav-item" onclick="scrollToSection('features')">特点亮点</a>
+    <a class="nav-item" onclick="scrollToSection('candidates')">适合人群</a>
+    <a class="nav-item" onclick="scrollToSection('pros-cons')">优缺点</a>
+    <a class="nav-item" onclick="scrollToSection('video-section')">视频演示</a>
+  </div>
+</nav>
+
+<!-- ===== Main Content ===== -->
+<main id="main-content">
+<!-- Content rendered by JS -->
+</main>
+
+<footer>
+  <p>本页面仅供科普教育参考，具体手术方案请咨询专业眼科医生</p>
+</footer>
+
+<script>
+// ===== Procedure Data =====
+const procedures = {
+  'smile': {
+    id: 'smile',
+    heroBadge: 'SMILE · 微创全飞秒',
+    heroTitle: 'SMall Incision<br>Lenticule Extraction',
+    heroSubtitle: '飞秒激光角膜基质微透镜取出术<br>无瓣 · 微创 · 精准',
+    heroImg: 'png/smile-hero.png',
+    heroVideoId: 'BV1LRHFzwEmX',
+    principle: {
+      title: '飞秒激光在角膜内雕刻',
+      desc: 'SMILE 手术利用飞秒激光在角膜基质层内部精确制作一个微透镜（Lenticule），再通过一个 2–4mm 的微小切口将其取出，从而改变角膜曲率，矫正近视和散光。',
+      img: 'png/smile-principle-3d.png',
+      title2: '飞秒激光 —— 冷激光，不产热',
+      para1: '飞秒激光是一种以脉冲形式运转的红外线激光，每个脉冲仅持续飞秒（10⁻¹⁵ 秒）级别。它通过<strong>光爆破效应</strong>在角膜组织中产生微小的空化气泡，气泡融合后形成精确的切割面，而对周围组织几乎不产生热损伤。',
+      para2: '与传统的准分子激光（PRK/LASIK）不同的是，SMILE 无需制作角膜瓣，也无需使用准分子激光消融角膜表面，整个切削过程<strong>在角膜基质层内部完成</strong>，最大限度地保留了角膜前部组织的完整性。',
+      para3: '手术全程仅使用一台飞秒激光设备（蔡司 VisuMax），一步完成微透镜制作和切口，无需更换设备。'
+    },
+    stepsTitle: '五步完成，单眼仅需 23–28 秒',
+    stepsDesc: '从躺上手术台到走下手术台，双眼手术全程仅需 10 分钟左右。',
+    steps: [
+      {num: 1, title: '负压吸引固定', desc: '角膜接触镜轻柔吸附眼球，保持术中眼球稳定'},
+      {num: 2, title: '激光制作微透镜', desc: '飞秒激光在基质层内精确切割透镜形状'},
+      {num: 3, title: '激光制作微切口', desc: '制作 2–4mm 微切口，连接透镜边缘至角膜表面'},
+      {num: 4, title: '分离并取出透镜', desc: '显微器械经微切口分离透镜并完整取出'},
+      {num: 5, title: '手术完成', desc: '取出透镜后角膜曲率改变，近视矫正即刻生效'}
+    ],
+    featuresTitle: '为什么选择 SMILE？',
+    features: [
+      {icon: '🛡', title: '无角膜瓣设计', desc: '无需制作角膜瓣，杜绝角膜瓣移位、皱褶、上皮植入等瓣相关并发症'},
+      {icon: '🔬', title: '2–4mm 微创切口', desc: '仅在角膜边缘制作微小切口，最大限度保留角膜神经纤维完整性'},
+      
+      {icon: '⚡', title: '手术速度快', desc: '单眼激光扫描仅需 23–28 秒，双眼全程约 10 分钟'},
+      {icon: '👁', title: '术后干眼更少', desc: '微创切口最大限度保留了角膜表面神经纤维，术后干眼发生率理论低于 LASIK'}
+    ],
+    candidates: {
+      suitable: [
+        '近视：−1.00D 至 −10.00D，散光 ≤ −5.00D',
+        '年满 18 周岁，近 2 年屈光度稳定',
+        '角膜厚度充足（术后剩余基质床 ≥ 250μm）',
+        '爱好运动、从事有身体碰撞风险职业（军人、运动员、警察等）',
+        '担心 LASIK 角膜瓣并发症者',
+        '有干眼倾向，希望选择干眼风险更低的手术方式'
+      ],
+      unsuitable: [
+        '远视（SMILE 目前仅获批用于近视和近视散光矫正）',
+        '角膜厚度不足或角膜形态异常（如圆锥角膜）',
+        '严重干眼症、活动性眼部炎症或感染',
+        '严重自身免疫性疾病（红斑狼疮、类风湿等）',
+        '未受控制的青光眼或糖尿病视网膜病变',
+        '妊娠期或哺乳期（激素波动影响屈光度和角膜形态）'
+      ]
+    },
+    versions: [
+      {title: 'SMILE 4.0', tag: '智能精准版', desc: '搭载 <strong>VISULYZE 软件系统</strong>，通过 AI 算法优化切削代码，建立个性化预测模型，消除设备差异和环境因素影响。引入自动中心定位辅助（CentraLign），矫正精度可达 <strong>0.001D</strong>。相比传统方案，术后夜间眩光、光晕等并发症减少 30% 以上，干眼风险更低。'},
+      {title: 'SMILE Pro', tag: '极速旗舰版', desc: '搭载新一代 VisuMax 飞秒激光器，激光脉冲频率大幅提升，单眼扫描时间从 SMILE 4.0 的 23–28 秒缩短至约 <strong>10 秒</strong>。负压吸引时间显著减少，患者术中体验更舒适，尤其适合配合度较差或容易紧张的患者。保留 SMILE 4.0 的智能优化特性。'}
+    ],
+    pros: [
+      '无角膜瓣，杜绝瓣相关并发症',
+      '2–4mm 微创切口，角膜神经损伤少',
+      '保留前弹力层，生物力学更稳定',
+      '术后干眼发生率理论低于 LASIK',
+      '单设备操作，手术流程简洁高效',
+      '切口愈合快，术后次日即可正常生活'
+    ],
+    cons: [
+      '矫正范围有一定限度（−1.00D 至 −10.00D）',
+      '若术后出现屈光回退，二次增强手术相对复杂',
+      '术后早期（1–3 天）视力恢复略慢于 LASIK',
+      '对术者操作技巧要求较高（需分离并完整取出透镜）',
+      '极少数情况下可能出现透镜残留或撕裂',
+      '超高度近视（> −10.00D）矫正范围受限'
+    ]
+  },
+'fslasik-wavefront': {
+    id: 'fslasik-wavefront',
+    heroBadge: 'FS-LASIK · 精雕（波前像差引导）',
+    heroTitle: 'Wavefront-Guided<br>Femtosecond LASIK',
+    heroSubtitle: '飞秒制瓣 + 波前像差引导个性化消融<br>精准 · 个性化 · 视觉质量优异',
+    heroImg: 'png/fslasik-wavefront-hero.png',
+    heroVideoId: 'BV1iTnZzxE6e',
+    principle: {
+      title: '波前像差引导——为每只眼定制「指纹级」矫正',
+      desc: 'FS-LASIK 精雕（波前像差引导）先以飞秒激光制作超薄角膜瓣（100–110μm），再用准分子激光根据术前采集的全眼像差数据进行个性化消融。波前传感器测量进入眼球光线的微小偏差（像差），生成独一无二的「眼光学指纹」，引导激光精确补偿这些不规则。',
+      img: 'png/pr-fslasik-wavefront.png',
+      title2: '波前像差——光线的「路径偏差」',
+      para1: '完美的光学系统中，平行光线穿过瞳孔后应汇聚于视网膜同一焦点。但真实的人眼存在<strong>低阶像差</strong>（近视、远视、散光）和<strong>高阶像差</strong>（球差、彗差、三叶草等）。波前引导技术不仅能矫正低阶像差，还能<strong>降低术前已存在的高阶像差</strong>，甚至避免手术引入新的高阶像差。',
+      para2: '术前通过<strong>波前像差仪</strong>（如WaveScan）测量全眼像差图，数据导入准分子激光系统，生成<strong>个性化消融方案</strong>。飞秒激光制瓣后，准分子激光按照波前引导方案对角膜基质进行精确消融，矫正屈光不正的同时优化像差。',
+      para3: '相比传统标准化消融，波前引导可减少术后夜间眩光、光晕等视觉质量问题的发生，尤其适合<strong>术前高阶像差较高</strong>或<strong>瞳孔较大</strong>的患者。'
+    },
+    stepsTitle: '五步完成，飞秒制瓣 + 准分子消融',
+    stepsDesc: '单眼制瓣约15秒，准分子消融视度数而定（约4–10秒/100度），全程约15–20分钟。',
+    steps: [
+      {num: 1, title: '术前波前检测', desc: '波前像差仪采集全眼像差数据，生成个性化消融方案'},
+      {num: 2, title: '飞秒激光制瓣', desc: '飞秒激光制作100–110μm超薄角膜瓣，蒂部灵活选择'},
+      {num: 3, title: '掀瓣 + 波前引导消融', desc: '轻柔掀开角膜瓣，准分子激光按波前方案对角膜基质进行个性化切削'},
+      {num: 4, title: '角膜瓣复位', desc: '将角膜瓣平滑复位，冲洗层间，无需缝合'},
+      {num: 5, title: '手术完成', desc: '角膜瓣自然贴合，术后数分钟瓣即稳定'}
+    ],
+    featuresTitle: '为什么选择 FS-LASIK 精雕？',
+    features: [
+      {icon: '🎯', title: '波前引导个性化', desc: '为每只眼定制消融方案，精度达微米级，矫正近视同时优化高阶像差'},
+
+      {icon: '⚡', title: '飞秒制瓣精准', desc: '100–110μm超薄瓣，厚度均一、边缘整齐，安全性高'},
+      {icon: '👁', title: '适用范围广', desc: '可矫正近视、远视、散光及混合散光，屈光范围宽于SMILE'},
+      {icon: '🔄', title: '二次增强方便', desc: '如有屈光回退，可轻松掀开原瓣进行增强手术，无需重新制瓣'}
+    ],
+    candidates: {
+      suitable: [
+        '近视 −1.00D 至 −12.00D，远视 ≤ +6.00D，散光 ≤ −6.00D',
+        '术前波前检查显示高阶像差较高者',
+        '瞳孔直径较大（>6mm），对夜间视觉质量要求高',
+        '年满18周岁，近2年屈光度稳定',
+        '角膜厚度充足（术后剩余基质床 ≥ 280μm）'
+      ],
+      unsuitable: [
+        '角膜厚度不足，无法安全制作角膜瓣',
+        '角膜形态异常（圆锥角膜、边缘变性等）',
+        '严重干眼症或活动性眼部炎症',
+        '严重自身免疫性疾病',
+        '未受控制的青光眼',
+        '妊娠期或哺乳期'
+      ]
+    },
+    versions: null,
+    versionsDesc: '',
+    pros: [
+      '波前引导，矫正近视同时优化高阶像差',
+      '术后视觉质量（尤其夜间）优于传统LASIK',
+      '飞秒制瓣精确、均匀、安全',
+      '矫正范围宽，可矫正远视和混合散光',
+      '二次增强手术方便（掀瓣即可）',
+      '术后恢复快，数小时即有明显视力提升'
+    ],
+    cons: [
+      '制作角膜瓣，存在瓣相关并发症风险',
+      '角膜生物力学变化大于SMILE',
+      '术后干眼发生率高于SMILE',
+      '术前需完成波前像差检测，流程略复杂',
+      '极度不规则角膜无法充分获益于波前引导'
+    ]
+  },
+
+  'fslasik-q': {
+    id: 'fslasik-q',
+    heroBadge: 'FS-LASIK · 精雕Q+（Q值引导）',
+    heroTitle: 'Q-Value Guided<br>Femtosecond LASIK',
+    heroSubtitle: '飞秒制瓣 + Q值引导非球面消融<br>维持角膜形态 · 减少球差引入',
+    heroImg: 'png/hero-fslasik-q.png',
+    heroVideoId: 'BV1iTnZzxE6e',
+    principle: {
+      title: 'Q值引导——维持角膜天然非球面形态',
+      desc: '人眼角膜并非完美球面，而是天然的非球面（扁椭圆）形态，用Q值（Asphericity）来描述。常规激光消融会改变角膜Q值，使其趋于球面化，引入正球差进而影响夜间视觉质量。精雕Q+通过Q值引导算法，在矫正屈光不正的同时尽量<strong>维持术前角膜的非球面特性</strong>。',
+      img: 'png/pr-fslasik-q.png',
+      title2: '为什么角膜的「非球面性」很重要？',
+      para1: '健康的角膜是<strong>扁椭圆形态</strong>（Q < 0），这意味着角膜中央曲率大于周边，有助于抵消球差，形成清晰的视网膜成像。传统激光消融往往使Q值向0（球面化）偏移，术后可能引入<strong>正球差</strong>，导致夜间光晕和眩光。',
+      para2: '精雕Q+在术前测量患者角膜Q值，根据角膜形态和屈光度计算<strong>目标Q值</strong>，设计非球面消融方案，使术后角膜依然保持自然的扁椭圆形态，<strong>减少球差引入</strong>，从而改善夜间视觉质量。',
+      para3: '适用于<strong>术前角膜非球面形态良好</strong>的患者，尤其推荐给关注术后视觉质量、对夜间眩光敏感的患者。'
+    },
+    stepsTitle: '五步完成，飞秒制瓣 + Q值引导消融',
+    stepsDesc: '单眼制瓣约15秒，准分子消融视度数而定，全程约15–20分钟。',
+    steps: [
+      {num: 1, title: '角膜地形图检查', desc: '测量角膜前表面Q值及角膜曲率，确定非球面参数'},
+      {num: 2, title: '飞秒激光制瓣', desc: '飞秒激光制作超薄角膜瓣，厚度精确可控'},
+      {num: 3, title: '掀瓣 + Q值引导消融', desc: '掀开角膜瓣，准分子激光按非球面方案切削，维持角膜天然Q值'},
+      {num: 4, title: '角膜瓣复位', desc: '角膜瓣复位，层间冲洗，自然贴合'},
+      {num: 5, title: '手术完成', desc: '角膜瓣平整贴附，术后角膜保持非球面形态'}
+    ],
+    featuresTitle: '为什么选择 FS-LASIK 精雕Q+？',
+    features: [
+      {icon: '🔵', title: '维持角膜非球面', desc: '保持术前天然Q值，减少球差引入，术后角膜形态更接近生理状态'},
+      {icon: '🌙', title: '夜间视觉改善', desc: '球差控制好，夜间光晕、眩光发生减少'},
+      {icon: '📐', title: '形态学精准', desc: '以角膜真实形态为基准设计消融方案，而非仅依赖屈光度'},
+      {icon: '⚡', title: '飞秒制瓣安全', desc: '超薄瓣，边缘整齐，愈合快'}
+    ],
+    candidates: {
+      suitable: [
+        '近视 −1.00D 至 −12.00D，散光 ≤ −6.00D',
+        '术前角膜Q值偏负（非球面形态良好），希望术后维持',
+        '对术后视觉质量和夜间驾驶视力有要求的患者',
+        '年满18周岁，近2年屈光度稳定',
+        '角膜厚度充足（术后剩余基质床 ≥ 280μm）'
+      ],
+      unsuitable: [
+        '术前角膜已偏球面化（Q ≈ 0）的患者获益有限',
+        '角膜厚度不足或角膜形态异常',
+        '严重干眼症或活动性眼部炎症',
+        '自身免疫性疾病未受控制',
+        '妊娠期或哺乳期'
+      ]
+    },
+    versions: null,
+    versionsDesc: '',
+    pros: [
+      '维持角膜天然非球面形态，减少球差引入',
+      '术后夜间视觉质量优于传统标准化消融',
+      '飞秒制瓣精准、安全',
+      '矫正范围宽，可矫正远视及混合散光',
+      '二次增强方便',
+      '术后恢复快'
+    ],
+    cons: [
+      '存在角膜瓣相关并发症风险',
+      '不能矫正术前已存在的高阶像差（球差控制 ≠ 像差优化）',
+      '术后角膜生物力学改变大于SMILE',
+      '干眼风险高于表层手术'
+    ]
+  },
+
+  'fslasik-c': {
+    id: 'fslasik-c',
+    heroBadge: 'FS-LASIK · 精雕C+（地形图引导）',
+    heroTitle: 'Topography-Guided<br>Femtosecond LASIK',
+    heroSubtitle: '飞秒制瓣 + 角膜地形图引导消融<br>修复不规则 · 重建对称角膜',
+    heroImg: 'png/hero-fslasik-c.png',
+    heroVideoId: 'BV1iTnZzxE6e',
+    principle: {
+      title: '地形图引导——以角膜真实形态为蓝本',
+      desc: '精雕C+（Contoura Vision）通过术前<strong>角膜地形图仪</strong>获取角膜前表面数万个数据点，生成角膜形态高程图。准分子激光按照地形图数据引导消融，矫正屈光不正的同时<strong>平滑角膜表面不规则</strong>，重建对称的角膜形态。',
+      img: 'png/pr-fslasik-c.png',
+      title2: '角膜地形——眼睛的「3D等高线图」',
+      para1: '角膜地形图精确测量角膜前表面的<strong>曲率、高程和形态规则性</strong>，可检测到普通验光无法发现的角膜表面微小不规则。这些不规则可能是先天的，也可能由外伤、既往手术或角膜疾病导致。地形图引导利用这些数据，生成<strong>角膜形态个性化消融方案</strong>。',
+      para2: '精雕C+不仅矫正屈光不正，还能<strong>主动修复角膜前表面的不规则性</strong>——平整角膜表面的微小凹凸，使其更接近理想的对称形态。这使它成为<strong>角膜表面不规则</strong>患者（如既往RK术后、角膜瘢痕边缘不规则散光）的优选方案。',
+      para3: '精雕C+的核心优势在于<strong>形态层面的个性化</strong>——不仅矫正度数，更是重塑角膜表面形态，让术后角膜更规则、更对称。'
+    },
+    stepsTitle: '五步完成，飞秒制瓣 + 地形图引导消融',
+    stepsDesc: '单眼制瓣约15秒，准分子消融视度数及不规则程度而定。',
+    steps: [
+      {num: 1, title: '角膜地形图采集', desc: '地形图仪获取角膜前表面数万数据点，生成角膜高程图'},
+      {num: 2, title: '飞秒激光制瓣', desc: '飞秒激光制作角膜瓣，厚度约100–110μm'},
+      {num: 3, title: '掀瓣 + 地形图引导消融', desc: '掀开角膜瓣，准分子激光根据地貌数据精细切削，平整不规则'},
+      {num: 4, title: '角膜瓣复位', desc: '角膜瓣复位冲洗，自然贴附'},
+      {num: 5, title: '手术完成', desc: '术后角膜表面更规则、对称，视觉质量提升'}
+    ],
+    featuresTitle: '为什么选择 FS-LASIK 精雕C+？',
+    features: [
+      {icon: '🗺', title: '夜间视觉优异', desc: '角膜地形平滑后，球差和彗差减少，夜视力显著提升'},
+      {icon: '✨', title: '修复不规则', desc: '平整角膜表面的形态学缺陷，重建对称、规则的光学表面'},
+      {icon: '🎯', title: '矫正不规则散光', desc: '对非对称、不规则散光的矫正效果优于其他引导方式'},
+
+      {icon: '⚡', title: '飞秒制瓣安全', desc: '超薄、精确的角膜瓣，边缘整齐，愈合快'}
+    ],
+    candidates: {
+      suitable: [
+        '近视、远视、规则及不规则散光',
+        '角膜前表面存在形态不规则的患者',
+        '既往屈光术后（RK、PRK、LASIK）出现偏中心或不规则散光',
+        '角膜形态轻度异常但不至于角膜移植者',
+        '对术后视觉质量要求高，尤其关注对称性的患者'
+      ],
+      unsuitable: [
+        '角膜中央严重瘢痕或严重不规则',
+        '角膜厚度不足或圆锥角膜',
+        '严重干眼症或活动性眼部炎症',
+        '自身免疫性疾病未受控制',
+        '妊娠期或哺乳期'
+      ]
+    },
+    versions: null,
+    versionsDesc: '',
+    pros: [
+      '地形图引导，修复角膜表面不规则',
+      '对不规则散光疗效独特',
+      '适合既往屈光术后角膜形态不佳的修复',
+      '飞秒制瓣安全精确',
+      '矫正范围宽',
+      '术后恢复快'
+    ],
+    cons: [
+      '存在角膜瓣相关并发症风险',
+      '对角膜地形图测量要求高，需要稳定泪膜',
+      '术后角膜生物力学弱于SMILE',
+      '干眼风险存在',
+      '费用较高'
+    ]
+  },
+
+  'fslasik-ray': {
+    id: 'fslasik-ray',
+    heroBadge: 'FS-LASIK · 全光塑（光迹追踪引导）',
+    heroTitle: 'Ray-Tracing<br>Femtosecond LASIK',
+    heroSubtitle: '飞秒制瓣 + 光迹追踪引导全眼光学模型<br>终极个性化 · 全眼模拟 · 3D光线追迹',
+    heroImg: 'png/hero-fslasik-ray.png',
+    heroVideoId: 'BV1iTnZzxE6e',
+    principle: {
+      title: '光迹追踪——模拟数百万条光线穿眼路径',
+      desc: '全光塑（InnovaSight）是FS-LASIK领域最先进的个性化引导技术。它利用<strong>光迹追踪（Ray Tracing）</strong>原理，构建患者的<strong>全眼3D光学模型</strong>（包括角膜前/后表面、晶状体、眼轴长度），模拟数百万条光线经眼屈光系统的传播路径，计算最优消融方案。',
+      img: 'png/pr-fslasik-ray.png',
+      title2: '光迹追踪——超越像差和地形，直指「光路优化」',
+      para1: '不同于波前引导（测量像差）或地形图引导（测量角膜形状），光迹追踪技术<strong>从光线传播的物理规律出发</strong>。系统构建全眼3D模型后，模拟光线穿过角膜前表面→角膜后表面→瞳孔→晶状体→玻璃体→视网膜的完整路径，计算光斑在视网膜上的<strong>实际落点与理想焦点的偏差</strong>。',
+      para2: '基于这些偏差数据，系统生成<strong>最优角膜消融方案</strong>，使术后光线尽可能精准汇聚于视网膜黄斑中心凹。这种方法考虑了<strong>全眼光学系统</strong>的协同作用，而非仅针对角膜前表面优化，因此理论上<strong>视觉质量最优</strong>。',
+      para3: '全光塑尤其适合对视觉质量有极致追求的患者，以及<strong>既往激光术后效果不满意</strong>需要二次优化的复杂病例。'
+    },
+    stepsTitle: '五步完成，飞秒制瓣 + 全眼模型引导消融',
+    stepsDesc: '制瓣约15秒，准分子消融视度数而定，术前数据采集约15分钟。',
+    steps: [
+      {num: 1, title: '全眼模型构建', desc: '测量角膜前后表面、晶状体、眼轴，构建全眼3D光学模型'},
+      {num: 2, title: '光迹追踪模拟', desc: '系统模拟数百万条光线传播路径，分析光斑偏差'},
+      {num: 3, title: '飞秒激光制瓣', desc: '飞秒激光制作超薄角膜瓣'},
+      {num: 4, title: '掀瓣 + 全光塑消融', desc: '掀开角膜瓣，准分子激光按光迹追踪最优方案切削'},
+      {num: 5, title: '角膜瓣复位', desc: '角膜瓣复位，手术完成'}
+    ],
+    featuresTitle: '为什么选择全光塑？',
+    features: [
+      {icon: '💡', title: '光迹追踪', desc: '光线物理规律驱动，全眼3D模型模拟数百万条光路传播'},
+      {icon: '👁', title: '全眼优化', desc: '考虑角膜前后表面+晶状体+眼轴，而非仅角膜前表面'},
+      {icon: '🏆', title: '终极个性化', desc: '当前FS-LASIK领域最全面的个性化技术'},
+
+      {icon: '🌙', title: '视觉质量领先', desc: '理论上最优的术后视觉质量，眩光和光晕最小化'}
+    ],
+    candidates: {
+      suitable: [
+        '近视、远视、散光的各级矫正',
+        '对术后视觉质量有极致追求的患者',
+        '既往屈光术后效果不满意，需要二次修复',
+        '瞳孔直径大、夜间视力要求高的患者',
+        '角膜厚度充足（术后剩余基质床 ≥ 280μm）'
+      ],
+      unsuitable: [
+        '角膜厚度不足或角膜形态异常',
+        '严重干眼症或活动性眼部炎症',
+        '未受控制的青光眼或糖尿病',
+        '自身免疫性疾病',
+        '妊娠期或哺乳期'
+      ]
+    },
+    versions: null,
+    versionsDesc: '',
+    pros: [
+      '光迹追踪驱动，全眼光学系统优化',
+      '视觉质量理论上最优',
+      '对复杂屈光异常修复效果最佳',
+      '飞秒制瓣安全精确',
+      '矫正范围宽',
+      '适合二次修复手术'
+    ],
+    cons: [
+      '存在角膜瓣相关并发症风险',
+      '设备复杂，术前数据采集耗时长',
+      '费用最高',
+      '术后角膜生物力学弱于SMILE',
+      '干眼风险存在'
+    ]
+  },
+
+  'tprk': {
+    id: 'tprk',
+    heroVideoId: 'BV1pzHFzGEKo',
+    heroBadge: '全激光TPRK · 无接触表层手术',
+    heroTitle: 'Transepithelial<br>Photorefractive Keratectomy',
+    heroSubtitle: '经上皮准分子激光角膜切削术<br>无刀 · 无瓣 · 无接触 · 零负压',
+    heroImg: 'png/hero-tprk.png',
+    principle: {
+      title: '一步完成上皮去除和基质消融',
+      desc: 'TPRK是PRK（表层手术）的最新一代。它使用同一台准分子激光设备在<strong>一步中</strong>完成角膜上皮的去除和基质层的屈光矫正消融——无需酒精浸泡、无需机械刮除上皮、无需制作角膜瓣。全程零器械接触，激光由上皮表面向基质层逐步切削。',
+      img: 'png/pr-tprk.png',
+      title2: '为什么选择不制瓣的表层手术？',
+      para1: '与制瓣手术（LASIK/SMILE）不同，TPRK不制作任何角膜瓣，而是直接去除中央约50μm厚的角膜上皮层，然后对角膜基质前表面进行准分子激光消融。因为没有角膜瓣，完全消除了<strong>角膜瓣相关并发症</strong>（瓣移位、皱褶、上皮植入等），角膜生物力学稳定性<strong>优于制瓣手术</strong>。',
+      para2: 'TPRK使用经上皮（Transepithelial）技术，激光同时去除上皮并开始基质消融，<strong>一步完成</strong>，整个过程无缝衔接。相比传统PRK（先用酒精松解再用刮刀去除上皮），TPRK的上皮去除更精准，基质面更光滑，术后刺激和疼痛更轻。',
+      para3: '术后角膜上皮将在<strong>3–5天</strong>内完全再生，期间需佩戴绷带型隐形眼镜（治疗性接触镜）保护创面。恢复期间可能出现畏光、流泪、异物感等症状，但完全恢复后的视觉质量和角膜生物力学均优于制瓣手术。'
+    },
+    stepsTitle: '四步完成，全程无接触',
+    stepsDesc: '单眼激光治疗时间约30–50秒（视度数而定），全程约10–15分钟。',
+    steps: [
+      {num: 1, title: '经上皮切削', desc: '准分子激光精确去除角膜中央上皮（约50μm），基质面光滑'},
+      {num: 2, title: '基质消融', desc: '激光继续对角膜基质层进行屈光矫正切削'},
+      {num: 3, title: 'Mitomycin C冲洗', desc: '使用丝裂霉素（MMC）抑制Haze形成，预防角膜上皮下混浊'},
+      {num: 4, title: '佩戴绷带镜', desc: '放置治疗性角膜接触镜，保护创面约3–5天促上皮愈合'}
+    ],
+    featuresTitle: '为什么选择 TPRK？',
+    features: [
+      {icon: '🛡', title: '绝对无瓣', desc: '不做角膜瓣，零瓣相关并发症，终身不用担心瓣移位或皱褶'},
+      {icon: '💪', title: '生物力学最强', desc: '保留角膜前弹力层，角膜结构完整性优于所有制瓣手术'},
+
+      {icon: '👤', title: '适合薄角膜', desc: '不制瓣意味着消耗角膜厚度更少，适合角膜偏薄不达标LASIK的患者'}
+    ],
+    candidates: {
+      suitable: [
+        '近视 −1.00D 至 −8.00D，散光 ≤ −4.00D',
+        '角膜偏薄，无法安全进行制瓣手术（LASIK/SMILE）的患者',
+        '军人、运动员、格斗爱好者等易受眼部外伤的人群',
+        '干眼倾向严重，希望选择干眼影响最小的手术',
+        '对术后角膜安全性有最高要求者'
+      ],
+      unsuitable: [
+        '角膜厚度严重不足',
+        '圆锥角膜或角膜营养不良',
+        '严重干眼症或眼表疾病未控制',
+        '自身免疫性疾病活动期',
+        '瘢痕体质（可能增加Haze风险）',
+        '妊娠期或哺乳期',
+        '无法接受术后3–5天恢复期不适'
+      ]
+    },
+    versions: null,
+    versionsDesc: '',
+    pros: [
+      '无角膜瓣，绝对无瓣并发症',
+      '角膜生物力学最强',
+      '适合角膜偏薄患者',
+      '无负压吸引，术中零黑朦风险',
+      '全程无器械接触，感染风险低',
+      '外伤抵抗力强，运动员和军人首选'
+    ],
+    cons: [
+      '术后上皮再生期3–5天，恢复较慢',
+      '术后早期畏光、流泪、异物感明显',
+      'Haze风险（角膜上皮下雾状混浊），需MMC预防',
+      '屈光回退略高于制瓣手术',
+      '术后需佩戴绷带镜，频繁复查',
+      '高度近视效果略逊于SMILE/FS-LASIK'
+    ]
+  },
+
+  'icl-v5': {
+    id: 'icl-v5',
+    heroVideoId: 'BV1YXpizAEUw',
+    heroBadge: '晶体植入 · ICL-V5',
+    heroTitle: 'Implantable<br>Collamer Lens V5',
+    heroSubtitle: '有晶体眼后房型人工晶体植入术<br>不切削角膜 · 可逆 · 超高清',
+    heroImg: 'png/hero-ICLV5.png',
+    principle: {
+      title: '给眼睛戴上「内置式隐形眼镜」',
+      desc: 'ICL-V5是一种<strong>可折叠的超薄人工晶体</strong>，由瑞士STAAR公司研发的专利材料Collamer（胶原共聚物）制成。手术通过约3mm的微小角膜切口将晶体折叠注入眼内，展开后植入虹膜后方、天然晶状体前方的后房空间，<strong>不切除任何角膜组织</strong>，可矫正近视和散光。',
+      img: 'png/pr-icl-v5.png',
+      title2: 'ICL独特的「加法手术」理念',
+      para1: '不同于角膜激光手术「减法」——切削角膜改变曲率——ICL是<strong>「加法手术」</strong>，在眼内植入一枚适配度数的晶体，与天然晶状体共同组成屈光系统。其材料Collamer含有<strong>胶原蛋白</strong>和<strong>紫外线吸收基团</strong>，生物相容性极高，几乎不引起排异反应。',
+      para2: 'ICL-V5（V4c的升级版）引入<strong>中央孔（Aquaport）设计</strong>，直径约360μm的微孔位于晶体光学区中央，允许房水自然流通，<strong>无需术前做虹膜周切</strong>，大大简化手术流程并降低并发症风险。',
+      para3: 'ICL最大的独特优势在于<strong>可逆性</strong>——如出现任何问题或屈光状态改变，可以取出或更换晶体，恢复术前眼内状态，这是角膜激光手术无法做到的。'
+    },
+    stepsTitle: '五步完成，微创植入',
+    stepsDesc: '单眼手术时间约10–15分钟，双眼可分日或同日完成。',
+    steps: [
+      {num: 1, title: '晶体装载', desc: '将折叠的ICL晶体装载到专用推注器内'},
+      {num: 2, title: '制作切口', desc: '在角膜缘制作约3mm微切口，作为晶体植入通道'},
+      {num: 3, title: '晶体注入前房', desc: '通过微切口将折叠晶体推注入前房'},
+      {num: 4, title: '展开与定位', desc: '晶体在前房展开，用调整器将四襻推入后房睫状沟固定'},
+      {num: 5, title: '切口自愈', desc: '推助切口极微小，无需缝合即可自行愈合'}
+    ],
+    featuresTitle: '为什么选择 ICL-V5？',
+    features: [
+      {icon: '➕', title: '不切削角膜', desc: '保留角膜完整解剖结构，适合角膜偏薄或角膜形态不宜激光者'},
+      {icon: '🔄', title: '可逆可更换', desc: '晶体可取出或更换，不改变眼球原有结构'},
+      {icon: '🔬', title: '高清视觉质量', desc: 'Collamer材料透光率高，对比敏感度和分辨率优于角膜激光'},
+      {icon: '🌙', title: '夜间视觉极优', desc: '光学区直径大，不改变角膜曲率，眩光和光晕极低'},
+      {icon: '📏', title: '宽矫正范围', desc: '近视−0.50D至−18.00D，散光≤−6.0D，远超角膜激光极限'},
+      {icon: '☀️', title: '阻挡紫外线', desc: 'Collamer材料含UV吸收基团，减少紫外线对视网膜损伤'}
+    ],
+    candidates: {
+      suitable: [
+        '近视 −0.50D 至 −18.00D，散光 ≤ −6.00D',
+        '角膜偏薄、角膜形态不宜做角膜激光手术者',
+        '高度近视超出角膜激光矫正范围',
+        '干眼症状明显，不适合角膜激光手术者',
+        '希望保留未来其他治疗选择的患者',
+        '前房深度 ≥ 2.8mm（确保后房空间充足）'
+      ],
+      unsuitable: [
+        '前房深度 < 2.8mm（后房空间不足）',
+        '角膜内皮细胞计数过低（<2000 cells/mm²）',
+        '青光眼或色素播散综合征',
+        '白内障已出现或晶状体透明度下降',
+        '严重自身免疫性疾病',
+        '妊娠期或哺乳期',
+        '年龄 < 21 岁（屈光度可能不稳定）'
+      ]
+    },
+    versions: null,
+    versionsDesc: '',
+    pros: [
+      '不切削角膜，保留角膜解剖完整',
+      '可逆可更换，手术灵活性最高',
+      '高清视觉质量，对比敏感度优于激光',
+      '矫正范围极宽，尤其适合高度近视',
+      '对角膜干眼影响最小',
+      '防紫外线（Collamer含UV吸收基团）'
+    ],
+    cons: [
+      '为内眼手术，存在眼内感染和炎症风险',
+      '需精确定位后房空间，对术者要求高',
+      '前房深度要求严格（ACD ≥ 2.8mm）',
+      '费用最高',
+      '长期安全性数据较角膜激光手术少',
+      '少数患者可能出现晶状体前囊下混浊'
+    ]
+  },
+
+  'icl-longjing': {
+    id: 'icl-longjing',
+    heroVideoId: 'BV1YXpizAEUw',
+    heroBadge: '晶体植入 · 龙晶',
+    heroTitle: 'Loong PR<br>Phakic IOL',
+    heroSubtitle: '国产自主创新有晶体眼后房型晶体<br>不切削角膜 · 性价比高 · 国货之光',
+    heroImg: 'png/hero-loongPR.png',
+    principle: {
+      title: '国货之光——自主创新的后房型有晶体眼晶体',
+      desc: '龙晶是中国自主研发的有晶体眼后房型人工晶体，植入原理与ICL相同——通过微切口将折叠晶体注入后房，<strong>不切削角膜</strong>，矫正近视。由中国眼科企业爱博诺德（Eyebright）研发和生产。',
+      img: 'png/pr-longjing.png',
+      title2: '龙晶 vs ICL——国产创新有何不同？',
+      para1: '龙晶采用<strong>国产自主专利</strong>的材料和设计。其晶体材料具有优异的生物相容性和光学性能。结构上，龙晶采用<strong>四支撑襻后房固定设计</strong>，通过睫状沟稳定定位，确保晶体在眼内的长期位置稳定。光学区为6.0mm直径，提供足够的有效光学区。',
+      para2: '龙晶填补了国产有晶体眼晶体的技术空白，在<strong>性价比</strong>上具有明显优势——相比进口ICL价格更为亲民，同时保持了良好的临床效果和安全性。近年来的临床应用数据表明其稳定性和视觉效果均可靠。',
+      para3: '龙晶采用国产自主专利材料和设计，在保持高质量视觉效果的同时，提供了更具可及性的近视矫正选择。。'
+    },
+    stepsTitle: '五步完成，微创植入',
+    stepsDesc: '手术流程与ICL相似，单眼约10–15分钟。',
+    steps: [
+      {num: 1, title: '晶体装载', desc: '将折叠的龙晶晶体装载到推注器内'},
+      {num: 2, title: '制作切口', desc: '在角膜缘制作约3mm微切口，作为晶体植入通道'},
+      {num: 3, title: '晶体注入前房', desc: '经微切口将折叠晶体注入前房'},
+      {num: 4, title: '展开与定位', desc: '晶体展开后，四襻定位至后房睫状沟'},
+      {num: 5, title: '切口自愈', desc: '切口极微小，自行愈合无需缝合'}
+    ],
+    featuresTitle: '为什么选择龙晶？',
+    features: [
+      {icon: '🇨🇳', title: '国产自主创新', desc: '中国自主研发，专利材料和设计，临床效果可靠'},
+      {icon: '🌙', title: '夜间视觉极优', desc: '光学区直径大，不改变角膜曲率，眩光和光晕发生率极低'},
+      {icon: '➕', title: '不切削角膜', desc: '保留角膜完整性，适合角膜偏薄或形态不宜激光者'},
+      {icon: '🔄', title: '可逆可更换', desc: '可以取出或更换，保留眼内原有结构'},
+      {icon: '📏', title: '矫正范围宽', desc: '覆盖低度到超高度近视矫正'},
+      {icon: '☀️', title: '天然防紫外线', desc: '含UV吸收基团，保护晶状体和视网膜免受紫外线伤害'}
+    ],
+    candidates: {
+      suitable: [
+        '近视 −0.50D 至 −18.00D（暂不矫正散光）',
+        '角膜偏薄不宜角膜激光手术者',
+        '希望做晶体植入但ICL价格超预算者',
+        '干眼症状明显，不适合表层或制瓣手术',
+        '前房深度充足（ACD ≥ 2.8mm）',
+        '期望保留未来治疗选择（可逆性需求）'
+      ],
+      unsuitable: [
+        '前房深度不足（< 2.8mm）',
+        '角膜内皮细胞计数过低',
+        '青光眼或高眼压症',
+        '白内障已进展',
+        '严重自身免疫性疾病',
+        '年龄 < 21 岁屈光不稳定',
+        '妊娠期或哺乳期'
+      ]
+    },
+    versions: null,
+    versionsDesc: '',
+    pros: [
+      '国产自主创新，视觉质量优异',
+      '不切削角膜，保留角膜解剖完整',
+      '可逆可更换',
+      '矫正范围宽，覆盖低度到超高度近视',
+      '对干眼影响小',
+      '临床效果良好，安全性可靠'
+    ],
+    cons: [
+      '内眼手术，存在眼内感染和炎症风险',
+      '长期随访数据较ICL少（产品更新）',
+      '前房深度要求严格',
+      '对术者植入技术要求高',
+      '可能出现晶状体前囊下混浊',
+      '费用仍高于角膜激光手术'
+    ]
+  }
+};
+
+// ===== Render function =====
+function renderProcedure(procId) {
+  const p = procedures[procId];
+  const main = document.getElementById('main-content');
+  
+  main.innerHTML = `
+    <!-- Hero -->
+    <section class="hero" id="hero">
+      <div class="hero-content">
+        <div class="hero-text">
+          <div class="hero-badge">${p.heroBadge}</div>
+          <h1>${p.heroTitle}</h1>
+          <p class="subtitle">${p.heroSubtitle}</p>
+          <div class="hero-ctas">
+            <a href="#principle" class="btn-primary">了解原理</a>
+            <a href="#video-section" class="btn-outline">观看视频</a>
+          </div>
+        </div>
+        <div class="hero-image">
+          <img src="${p.heroImg}" alt="${p.heroBadge}" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Principle -->
+    <section class="principle fade-in" id="principle">
+      <div class="section-inner">
+        <div class="section-label">手术原理</div>
+        <h2 class="section-title">${p.principle.title}</h2>
+        <p class="section-desc">${p.principle.desc}</p>
+        <div class="principle-grid">
+          <div class="principle-diagram">
+            <img src="${p.principle.img}" alt="${p.principle.title}" />
+          </div>
+          <div class="principle-text">
+            <h3>${p.principle.title2}</h3>
+            <p>${p.principle.para1}</p>
+            <p>${p.principle.para2}</p>
+            ${p.principle.para3 ? `<p>${p.principle.para3}</p>` : ''}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Process -->
+    <section class="process fade-in" id="process">
+      <div class="section-inner">
+        <div class="section-label">手术过程</div>
+        <h2 class="section-title">${p.stepsTitle}</h2>
+        <p class="section-desc">${p.stepsDesc}</p>
+        <div class="steps" style="grid-template-columns: repeat(${p.steps.length}, 1fr);">
+          ${p.steps.map(s => `
+            <div class="step-card">
+              <div class="step-num">${s.num}</div>
+              <div class="step-body">
+                <h4>${s.title}</h4>
+                <p>${s.desc}</p>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features fade-in" id="features">
+      <div class="section-inner">
+        <div class="section-label">特点亮点</div>
+        <h2 class="section-title">${p.featuresTitle}</h2>
+        <div class="features-grid" style="grid-template-columns: repeat(${p.features.length === 4 ? 2 : 3}, 1fr);">
+          ${p.features.map(f => `
+            <div class="feature-card">
+              <div class="feature-icon">${f.icon}</div>
+              <h4>${f.title}</h4>
+              <p>${f.desc}</p>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </section>
+
+    <!-- Candidates -->
+    <section class="candidates fade-in" id="candidates">
+      <div class="section-inner">
+        <div class="section-label">适合人群</div>
+        <h2 class="section-title">你是否适合 ${p.heroBadge.split('·')[0].trim()}？</h2>
+        <p class="section-desc">术前需进行全面的眼部检查，由专业医生评估后方可确定手术方案。</p>
+        <div class="candidate-grid">
+          <div class="candidate-card">
+            <h4><span class="dot dot-green"></span> 适合做 ${p.heroBadge.split('·')[0].trim()}</h4>
+            <ul>${p.candidates.suitable.map(i => `<li>${i}</li>`).join('')}</ul>
+          </div>
+          <div class="candidate-card">
+            <h4><span class="dot dot-red"></span> 不适合 / 需谨慎</h4>
+            <ul>${p.candidates.unsuitable.map(i => `<li>${i}</li>`).join('')}</ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    ${p.versions ? `
+    <!-- Versions -->
+    <section class="versions fade-in" id="versions">
+      <div class="section-inner">
+        <div class="section-label">技术代际</div>
+        <h2 class="section-title">${p.versions.map(v => v.title).join(' 与 ')}</h2>
+        <p class="section-desc">${p.versionsDesc || '了解不同版本的特点，帮助做出更适合自己的选择。'}</p>
+        <div class="version-grid">
+          ${p.versions.map(v => `
+            <div class="version-card">
+              <h4>${v.title}</h4>
+              <span class="tag">${v.tag}</span>
+              <p>${v.desc}</p>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </section>
+    ` : ''}
+
+    <!-- Pros & Cons -->
+    <section class="pros-cons fade-in" id="pros-cons">
+      <div class="section-inner">
+        <div class="section-label">客观评价</div>
+        <h2 class="section-title">${p.heroBadge.split('·')[0].trim()} 的优点与局限</h2>
+        <p class="section-desc">没有任何一种手术是"最好的"，了解优缺点是做出正确选择的前提。</p>
+        <div class="procon-grid">
+          <div class="procon-card">
+            <h4>✅ 优点</h4>
+            <ul>${p.pros.map(i => `<li>${i}</li>`).join('')}</ul>
+          </div>
+          <div class="procon-card">
+            <h4>⚠️ 局限</h4>
+            <ul>${p.cons.map(i => `<li>${i}</li>`).join('')}</ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Video -->
+    <section id="video-section">
+      <div class="section-inner">
+        <div class="section-label">视频演示</div>
+        <h2 class="section-title">直观了解 ${p.heroBadge.split('·')[0].trim()} 手术</h2>
+        <p class="section-desc">点击下方窗口观看手术演示视频（来源：B站）</p>
+        <div class="video-placeholder" onclick="this.innerHTML='<iframe src=\\'https://player.bilibili.com/player.html?bvid=${p.heroVideoId}&autoplay=1&danmaku=0&high_quality=1\\' allowfullscreen></iframe>'">
+          <div class="play-btn">
+            <svg width="24" height="28" viewBox="0 0 24 28" fill="white"><path d="M0 0v28l24-14z"/></svg>
+          </div>
+        </div>
+      </div>
+    </section>
+  `;
+
+  // Re-observe scroll animations
+  setTimeout(initScrollObserver, 100);
+}
+
+// ===== Tab Switching =====
+function switchProcedure(procId) {
+  // Update tab buttons
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.procedure === procId || 
+      (['fslasik-wavefront','fslasik-q','fslasik-c','fslasik-ray'].includes(procId) && btn.dataset.procedure === 'fslasik') ||
+      (['icl-v5','icl-longjing'].includes(procId) && btn.dataset.procedure === 'icl'));
+  });
+  
+  // Update dropdown items
+  document.querySelectorAll('.dropdown-item').forEach(item => {
+    item.classList.toggle('active', item.dataset.procedure === procId);
+  });
+
+  // Render content
+  renderProcedure(procId);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ===== Event Listeners =====
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const parent = this.closest('.tab-item');
+    const dropdown = parent.querySelector('.dropdown-menu');
+    
+    if (dropdown) {
+      // If has dropdown, select the first active dropdown item
+      const firstItem = dropdown.querySelector('.dropdown-item.active') || dropdown.querySelector('.dropdown-item');
+      switchProcedure(firstItem.dataset.procedure);
+    } else {
+      switchProcedure(this.dataset.procedure);
+    }
+  });
+});
+
+document.querySelectorAll('.dropdown-item').forEach(item => {
+  item.addEventListener('click', function(e) {
+    e.stopPropagation();
+    switchProcedure(this.dataset.procedure);
+  });
+});
+
+// ===== Scroll Observer =====
+function initScrollObserver() {
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+}
+
+// ===== Smooth Scroll =====
+window.scrollToSection = function(id) {
+  const el = document.getElementById(id);
+  if (el) {
+    const offset = 112; // tab bar + nav height
+    window.scrollTo({ top: el.offsetTop - offset, behavior: 'smooth' });
+  }
+};
+
+// ===== Init =====
+renderProcedure('smile');
+initScrollObserver();
+</script>
+</body>
+</html>
