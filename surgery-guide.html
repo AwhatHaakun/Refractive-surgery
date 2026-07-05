@@ -420,9 +420,12 @@
       min-width: auto; width: 85vw; left: 50%; 
       transform: translateX(-50%) translateY(8px);
       flex-direction: column; gap: 2px; padding: 10px 12px;
+      z-index: 3000;
     }
     .tab-item.has-dropdown:hover .dropdown-menu { transform: translateX(-50%) translateY(0); }
     .dropdown-item { font-size: 13px; padding: 10px 14px; text-align: left; }
+    nav { top: 36px; }
+    main { margin-top: 84px; }
     .nav-inner { gap: 14px; }
     .nav-item { font-size: 11px; }
     section { padding: 48px 14px; }
@@ -1243,7 +1246,7 @@ document.querySelectorAll('.dropdown-item').forEach(item => {
   });
 });
 
-// ===== Scroll Observer =====
+// ===== Scroll Observer + Nav Highlight =====
 function initScrollObserver() {
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
@@ -1251,6 +1254,27 @@ function initScrollObserver() {
     });
   }, { threshold: 0.15 });
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Nav scroll spy (init once)
+  if (!window._scrollSpyActive) {
+    window._scrollSpyActive = true;
+    const sections = ['hero','principle','process','features','candidates','pros-cons','video-section'];
+    const navItems = document.querySelectorAll('.nav-item');
+  const mainEl = document.querySelector('main');
+  
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY + 130;
+    let current = 'hero';
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && el.offsetTop <= scrollY) current = id;
+    });
+    navItems.forEach(item => {
+      const target = item.getAttribute('onclick')?.match(/'(.*?)'/)?.[1];
+      item.classList.toggle('active', target === current);
+    });
+  });
+  }
 }
 
 // ===== Smooth Scroll =====
