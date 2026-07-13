@@ -81,8 +81,7 @@
     pointer-events: none; z-index: 2000;
     display: flex; gap: 8px; flex-wrap: nowrap;
   }
-  .tab-item.has-dropdown:hover .dropdown-menu,
-  .tab-item.has-dropdown .tab-btn:focus+.dropdown-menu {
+  .dropdown-menu.show {
     opacity: 1; visibility: visible;
     transform: translateX(-50%) translateY(0); pointer-events: all;
   }
@@ -423,7 +422,7 @@
       z-index: 3000;
       background: rgba(255,255,255,0.95);
     }
-    .tab-item.has-dropdown:hover .dropdown-menu { transform: translateX(-50%) translateY(0); }
+    .dropdown-menu.show { transform: translateX(-50%) translateY(0); }
     .dropdown-item { font-size: 13px; padding: 10px 14px; text-align: left; }
     nav { top: 36px; z-index: 500; }
     main { margin-top: 84px; }
@@ -1226,14 +1225,16 @@ function switchProcedure(procId) {
 
 // ===== Event Listeners =====
 document.querySelectorAll('.tab-btn').forEach(btn => {
-  btn.addEventListener('click', function() {
+  btn.addEventListener('click', function(e) {
     const parent = this.closest('.tab-item');
     const dropdown = parent.querySelector('.dropdown-menu');
-    
+
     if (dropdown) {
-      // If has dropdown, select the first active dropdown item
-      const firstItem = dropdown.querySelector('.dropdown-item.active') || dropdown.querySelector('.dropdown-item');
-      switchProcedure(firstItem.dataset.procedure);
+      // Toggle dropdown on click (not hover)
+      e.stopPropagation();
+      const isOpen = dropdown.classList.contains('show');
+      document.querySelectorAll('.dropdown-menu').forEach(d => d.classList.remove('show'));
+      if (!isOpen) dropdown.classList.add('show');
     } else {
       switchProcedure(this.dataset.procedure);
     }
@@ -1293,32 +1294,9 @@ window.scrollToSection = function(id) {
 renderProcedure('smile');
 initScrollObserver();
 
-// Mobile: tap to toggle dropdown
-document.querySelectorAll('.tab-item.has-dropdown .tab-btn').forEach(btn => {
-  btn.addEventListener('click', function(e) {
-    if (window.innerWidth <= 834) {
-      const dropdown = this.parentElement.querySelector('.dropdown-menu');
-      if (!dropdown) return;
-      const isOpen = dropdown.style.visibility === 'visible';
-      // Close all dropdowns first
-      document.querySelectorAll('.dropdown-menu').forEach(d => {
-        d.style.visibility = ''; d.style.opacity = ''; d.style.pointerEvents = '';
-      });
-      // Toggle this one
-      if (!isOpen) {
-        dropdown.style.visibility = 'visible';
-        dropdown.style.opacity = '1';
-        dropdown.style.pointerEvents = 'all';
-        e.stopPropagation();
-      }
-    }
-  });
-});
-// Close dropdown when tapping outside
+// Close dropdown when clicking outside
 document.addEventListener('click', () => {
-  document.querySelectorAll('.dropdown-menu').forEach(d => {
-    d.style.visibility = ''; d.style.opacity = ''; d.style.pointerEvents = '';
-  });
+  document.querySelectorAll('.dropdown-menu').forEach(d => d.classList.remove('show'));
 });
 </script>
 </body>
