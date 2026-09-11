@@ -81,8 +81,7 @@
     pointer-events: none; z-index: 2000;
     display: flex; gap: 8px; flex-wrap: nowrap;
   }
-  .tab-item.has-dropdown:hover .dropdown-menu,
-  .tab-item.has-dropdown .tab-btn:focus+.dropdown-menu {
+  .dropdown-menu.show {
     opacity: 1; visibility: visible;
     transform: translateX(-50%) translateY(0); pointer-events: all;
   }
@@ -400,16 +399,36 @@
     .hero-ctas { justify-content: center; }
     .hero-image { flex: 0 0 320px; max-width: 320px; }
     .principle-grid { flex-direction: column; text-align: center; }
-    .steps { grid-template-columns: repeat(3, 1fr); }
-    .features-grid { grid-template-columns: 1fr 1fr; }
-    .candidate-grid, .procon-grid { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: repeat(3, 1fr) !important; }
+    .features-grid { grid-template-columns: 1fr 1fr !important; }
+    .candidate-grid, .procon-grid, .version-grid { grid-template-columns: 1fr; }
+    .tab-btn { padding: 10px 14px; font-size: 14px; }
+    .tab-bar-inner { overflow-x: auto; justify-content: flex-start; -webkit-overflow-scrolling: touch; }
+    .dropdown-menu { min-width: 220px; flex-wrap: wrap; }
+    .dropdown-item { font-size: 12px; padding: 8px 12px; }
   }
   @media (max-width: 480px) {
-    .hero h1 { font-size: 32px; }
-    .steps { grid-template-columns: 1fr 1fr; }
-    .features-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 28px; }
+    .hero .subtitle { font-size: 15px; }
+    .section-title { font-size: 24px; }
+    .steps { grid-template-columns: 1fr 1fr !important; }
+    .features-grid { grid-template-columns: 1fr !important; }
     .hero-image { flex: 0 0 240px; max-width: 240px; }
-    .tab-btn { padding: 12px 14px; font-size: 15px; }
+    .tab-btn { padding: 8px 10px; font-size: 13px; }
+    .dropdown-menu { 
+      min-width: auto; width: 85vw; left: 50%; 
+      transform: translateX(-50%) translateY(8px);
+      flex-direction: column; gap: 2px; padding: 10px 12px;
+      z-index: 3000;
+      background: rgba(255,255,255,0.95);
+    }
+    .dropdown-menu.show { transform: translateX(-50%) translateY(0); }
+    .dropdown-item { font-size: 13px; padding: 10px 14px; text-align: left; }
+    nav { top: 36px; z-index: 500; }
+    main { margin-top: 84px; }
+    .nav-inner { gap: 14px; }
+    .nav-item { font-size: 11px; }
+    section { padding: 48px 14px; }
   }
 </style>
 </head>
@@ -424,10 +443,10 @@
     <div class="tab-item has-dropdown">
       <button class="tab-btn" data-procedure="fslasik">FS-LASIK 半飞秒</button>
       <div class="dropdown-menu" data-parent="fslasik">
-        <span class="dropdown-item active" data-procedure="fslasik-ray">全光塑</span>
-        <span class="dropdown-item" data-procedure="fslasik-c">精雕C+</span>
-        <span class="dropdown-item" data-procedure="fslasik-q">精雕Q+</span>
-        <span class="dropdown-item" data-procedure="fslasik-wavefront">精雕</span>
+        <span class="dropdown-item active" data-procedure="fslasik-ray">光迹追踪引导（全光塑）</span>
+        <span class="dropdown-item" data-procedure="fslasik-c">地形图引导（精雕C+）</span>
+        <span class="dropdown-item" data-procedure="fslasik-q">Q值引导（精雕Q+）</span>
+        <span class="dropdown-item" data-procedure="fslasik-wavefront">波前像差引导（精雕）</span>
       </div>
     </div>
     <div class="tab-item">
@@ -1206,14 +1225,16 @@ function switchProcedure(procId) {
 
 // ===== Event Listeners =====
 document.querySelectorAll('.tab-btn').forEach(btn => {
-  btn.addEventListener('click', function() {
+  btn.addEventListener('click', function(e) {
     const parent = this.closest('.tab-item');
     const dropdown = parent.querySelector('.dropdown-menu');
-    
+
     if (dropdown) {
-      // If has dropdown, select the first active dropdown item
-      const firstItem = dropdown.querySelector('.dropdown-item.active') || dropdown.querySelector('.dropdown-item');
-      switchProcedure(firstItem.dataset.procedure);
+      // Toggle dropdown on click (not hover)
+      e.stopPropagation();
+      const isOpen = dropdown.classList.contains('show');
+      document.querySelectorAll('.dropdown-menu').forEach(d => d.classList.remove('show'));
+      if (!isOpen) dropdown.classList.add('show');
     } else {
       switchProcedure(this.dataset.procedure);
     }
@@ -1227,7 +1248,7 @@ document.querySelectorAll('.dropdown-item').forEach(item => {
   });
 });
 
-// ===== Scroll Observer =====
+// ===== Scroll Observer + Nav Highlight =====
 function initScrollObserver() {
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
@@ -1235,6 +1256,29 @@ function initScrollObserver() {
     });
   }, { threshold: 0.15 });
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Nav scroll spy (init once)
+  if (!window._scrollSpyActive) {
+    window._scrollSpyActive = true;
+    const sections = ['hero','principle','process','features','candidates','pros-cons','video-section'];
+    const navItems = document.querySelectorAll('.nav-item');
+
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY + 140;
+    let current = 'hero';
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        const top = el.getBoundingClientRect().top + window.scrollY;
+        if (top <= scrollY) current = id;
+      }
+    });
+    navItems.forEach(item => {
+      const target = item.getAttribute('onclick')?.match(/'(.*?)'/)?.[1];
+      item.classList.toggle('active', target === current);
+    });
+  });
+  }
 }
 
 // ===== Smooth Scroll =====
@@ -1249,6 +1293,11 @@ window.scrollToSection = function(id) {
 // ===== Init =====
 renderProcedure('smile');
 initScrollObserver();
+
+// Close dropdown when clicking outside
+document.addEventListener('click', () => {
+  document.querySelectorAll('.dropdown-menu').forEach(d => d.classList.remove('show'));
+});
 </script>
 </body>
 </html>

@@ -1,0 +1,6 @@
+# macOS 自动生成的隐藏文件，不是内容
+.DS_Store
+
+# Hermes CLI 的本地补丁与备份，不属于本项目的部署内容
+models.py.bak
+models.py.patch
